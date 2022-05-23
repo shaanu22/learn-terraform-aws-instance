@@ -21,7 +21,7 @@ resource "aws_instance" "web" {
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh-key.id
 
-  user_data = "${file("apache-script.sh")}"
+  user_data = file("apache-script.sh")
 
   tags = {
     Name = "Hello-DevOps"
@@ -37,8 +37,6 @@ output "aws_ami_id" {
   value = data.aws_ami.ubuntu.id
 }
 
-
-
 resource "aws_security_group" "allow_ingress" {
   name        = "allow_ssh-http"
   description = "Allow ssh-http inbound traffic"
@@ -49,7 +47,7 @@ resource "aws_security_group" "allow_ingress" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.my_ip_address, aws_vpc.main.cidr_block]
   }
 
   ingress {
@@ -59,7 +57,6 @@ resource "aws_security_group" "allow_ingress" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
 
   egress {
     from_port   = 0
