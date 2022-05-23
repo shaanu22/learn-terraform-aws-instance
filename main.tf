@@ -13,15 +13,15 @@ provider "aws" {
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
- 
- tags = {
+
+  tags = {
     Name = "DevOps_VPC"
   }
 }
 
 locals {
-    public_cidr = ["10.0.0.0/24", "10.0.1.0/24"]
-    private_cidr = ["10.0.2.0/24", "10.0.3.0/24"]
+  public_cidr  = ["10.0.0.0/24", "10.0.1.0/24"]
+  private_cidr = ["10.0.2.0/24", "10.0.3.0/24"]
 }
 
 resource "aws_subnet" "public" {
@@ -56,7 +56,7 @@ resource "aws_internet_gateway" "main" {
 
 resource "aws_eip" "nat" {
   count = length(local.public_cidr)
-  vpc = true
+  vpc   = true
 }
 
 resource "aws_nat_gateway" "main" {
@@ -89,7 +89,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.main[count.index].id
   }
 
@@ -100,11 +100,11 @@ resource "aws_route_table" "private" {
 
 resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private[0].id
-  route_table_id =  aws_route_table.private[0].id
+  route_table_id = aws_route_table.private[0].id
 }
 
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public[0].id
-  route_table_id =  aws_route_table.public.id
+  route_table_id = aws_route_table.public.id
 }
 
