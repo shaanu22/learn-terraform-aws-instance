@@ -24,7 +24,7 @@ resource "aws_instance" "web" {
   user_data = file("apache-script.sh")
 
   tags = {
-    Name = "Hello-DevOps_World"
+    Name = "Hello-DevOps"
   }
 }
 
@@ -55,8 +55,8 @@ resource "aws_security_group" "allow_ingress" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip_address]
-  }
+    cidr_blocks = ["0.0.0.0/0"]
+    }
 
   egress {
     from_port   = 0
