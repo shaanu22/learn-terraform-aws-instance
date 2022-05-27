@@ -6,4 +6,3 @@ terraform {
     dynamodb_table = "terraform-shaanu-s3-backend-table"
   }
 }
-
