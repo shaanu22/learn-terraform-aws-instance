@@ -1,29 +1,29 @@
-resource "aws_s3_bucket" "b" {
-  bucket = "terraform-shaanu-s3-backend-bucket"
+resource "aws_s3_bucket" "s3-backend-bucket" {
+  bucket        = "s3-backend-bucket"
   force_destroy = true
   versioning {
-            enabled = true
-        }
+    enabled = true
+  }
   tags = {
-    Name        = "My bucket"
+    Name = "s3-backend-bucket"
   }
 }
 
 resource "aws_s3_bucket_acl" "remote-state" {
-  bucket = aws_s3_bucket.b.id
+  bucket = aws_s3_bucket.s3-backend-bucket.id
   acl    = "private"
 }
 
-resource "aws_s3_bucket_ownership_controls" "shaanu-example-ownership" {
-  bucket = aws_s3_bucket.b.id
+resource "aws_s3_bucket_ownership_controls" "remote-state-ownership" {
+  bucket = aws_s3_bucket.s3-backend-bucket.id
   rule {
     object_ownership = "BucketOwnerEnforced"
   }
-  depends_on = [aws_s3_bucket_acl.shaanu-example]
+  depends_on = [aws_s3_bucket_acl.remote-state]
 }
 
 resource "aws_dynamodb_table" "lock" {
-  name     = "terraform-shaanu-s3-backend-table"
+  name     = "lock"
   hash_key = "LockID"
 
   billing_mode   = "PROVISIONED"
@@ -36,7 +36,7 @@ resource "aws_dynamodb_table" "lock" {
   }
 
   tags = {
-    Name        = "dynamodb-table-1"
+    Name = "lock"
   }
 }
 
