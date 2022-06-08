@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.my_vpc_cidr
 
   tags = {
     Name = "DevOps_VPC"
@@ -20,15 +20,16 @@ resource "aws_vpc" "main" {
 }
 
 locals {
-  public_cidr  = ["10.0.0.0/24", "10.0.1.0/24"]
-  private_cidr = ["10.0.2.0/24", "10.0.3.0/24"]
+  public_cidr  = [var.public_cidr]
+  private_cidr = [var.private_cidr]
 }
 
 resource "aws_subnet" "public" {
   count = length(local.public_cidr)
 
   vpc_id     = aws_vpc.main.id
-  cidr_block = local.public_cidr[count.index]
+  cidr_block = var.public_cidr[count.index]
+  #local.public_cidr[count.index]
 
   tags = {
     Name = "public${count.index}"
@@ -39,7 +40,8 @@ resource "aws_subnet" "private" {
   count = length(local.private_cidr)
 
   vpc_id     = aws_vpc.main.id
-  cidr_block = local.private_cidr[count.index]
+  cidr_block = var.private_cidr[count.index]
+  #local.private_cidr[count.index]
 
   tags = {
     Name = "private${count.index}"

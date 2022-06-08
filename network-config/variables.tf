@@ -1,3 +1,11 @@
-variable "public_key_location" {}
-variable "my_ip_address" {}
-#variable "my_vpc_cidr" {}
+variable "my_vpc_cidr" {}
+variable "public_cidr" {
+  description = "cidr for public subnet"
+}
+variable "private_cidr" {
+  description = "cidr for private subnet"
+}
+variable "instance-type" {}
+
+
+
