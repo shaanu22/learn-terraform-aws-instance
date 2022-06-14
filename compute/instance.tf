@@ -37,12 +37,6 @@ output "aws_ami_id" {
   value = data.aws_ami.ubuntu.id
 }
 
-resource "aws_launch_configuration" "ec2-launch-config" {
-  name          = "ec2-launch-config"
-  image_id      = data.aws_ami.ubuntu.id
-  instance_type = var.instance-type
-}
-
 resource "aws_security_group" "allow_ingress" {
   name        = "allow_ssh-http"
   description = "Allow ssh-http inbound traffic"

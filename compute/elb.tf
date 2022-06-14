@@ -1,6 +1,6 @@
 resource "aws_elb" "load-balancer" {
   name               = "load-balancer"
-  availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  availability_zones = data.aws_availability_zones.available.names
 
   listener {
     instance_port     = 80
@@ -25,5 +25,14 @@ resource "aws_elb" "load-balancer" {
 
   tags = {
     Name = "load-balancer"
+  }
+}
+
+data "aws_availability_zones" "elb-ec2-az" {
+  all_availability_zones = true
+
+  filter {
+    name   = "opt-in-status"
+    values = ["not-opted-in", "opted-in"]
   }
 }

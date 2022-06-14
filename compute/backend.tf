@@ -18,9 +18,9 @@ data "terraform_remote_state" "vpc_id" {
   }
 }
 
-data "terraform_remote_state" "subnet_id" {
+data "terraform_remote_state" "cidr_block" {
   backend = "s3"
-  
+
   config = {
     bucket         = "s3-backend-bucket"
     key            = "terraform.tfstate"

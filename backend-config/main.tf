@@ -39,4 +39,3 @@ resource "aws_dynamodb_table" "lock" {
     Name = "lock"
   }
 }
-
