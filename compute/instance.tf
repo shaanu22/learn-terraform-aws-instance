@@ -40,14 +40,13 @@ output "aws_ami_id" {
 resource "aws_security_group" "allow_ingress" {
   name        = "allow_ssh-http"
   description = "Allow ssh-http inbound traffic"
-  vpc_id      = aws_vpc.main.id
 
   ingress {
     description = "ssh"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip_address, aws_vpc.main.cidr_block]
+    cidr_blocks = [var.my_ip_address]
   }
 
   ingress {
@@ -69,4 +68,3 @@ resource "aws_security_group" "allow_ingress" {
     Name = "allow_ssh"
   }
 }
-
