@@ -1,5 +1,5 @@
-resource "aws_autoscaling_group" "autoscaling-group" {
-  name                      = "autoscaling-group"
+resource "aws_autoscaling_group" "hello_devops" {
+  name                      = "Hello-DevOps"
   max_size                  = 3
   min_size                  = 1
   health_check_grace_period = 100
@@ -21,7 +21,7 @@ resource "aws_autoscaling_group" "autoscaling-group" {
 
   tag {
     key                 = "Name"
-    value               = "autoscaling-group"
+    value               = "Hello-DevOps"
     propagate_at_launch = true
   }
 }
