@@ -1,5 +1,0 @@
-network-config/terraform.tfstate
-terraform.tfvars
-.terraform*
-.terraform/*
-terraform.tfstate.*
