@@ -1,5 +1,5 @@
 
-data "aws_ami" "ubuntu" {
+/*data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
@@ -15,7 +15,7 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "web" {
+/*resource "aws_instance" "web" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.micro"
   associate_public_ip_address = true
@@ -26,9 +26,9 @@ resource "aws_instance" "web" {
   tags = {
     Name = "Hello-DevOps"
   }
-}
+}*/
 
-resource "aws_key_pair" "ssh-key" {
+/*resource "aws_key_pair" "ssh-key" {
   key_name   = "server-key"
   public_key = file(var.public_key_location)
 }
@@ -67,4 +67,4 @@ resource "aws_security_group" "allow_ingress" {
   tags = {
     Name = "allow_ssh"
   }
-}
+}*/

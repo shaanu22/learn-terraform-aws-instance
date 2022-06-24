@@ -1,6 +1,24 @@
+resource "aws_lb_target_group" "hello-devops" {
+  health_check {
+    interval            = 120
+    path                = "/"
+    protocol            = "HTTP"
+    timeout             = 100
+    healthy_threshold   = 5
+    unhealthy_threshold = 2
+  }
+
+  name        = "hello-devops"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "instance"
+}
+
 resource "aws_elb" "load-balancer" {
-  name               = "load-balancer"
-  availability_zones = data.aws_availability_zones.available.names
+  name = "load-balancer"
+  #vpc_id             = var.my_vpc_cidr
+  availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  #availability_zones = data.aws_availability_zones.available.names
 
   listener {
     instance_port     = 80
@@ -25,14 +43,5 @@ resource "aws_elb" "load-balancer" {
 
   tags = {
     Name = "load-balancer"
-  }
-}
-
-data "aws_availability_zones" "elb-ec2-az" {
-  all_availability_zones = true
-
-  filter {
-    name   = "opt-in-status"
-    values = ["not-opted-in", "opted-in"]
   }
 }
