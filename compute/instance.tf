@@ -16,8 +16,8 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_instance" "web" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = "t2.micro"
-  subnet_id                   = var.subnet_ids
+  instance_type               = var.instance-type
+  subnet_id                   = data.terraform_remote_state.vpc_id.outputs.private_subnets[*]
   security_groups             = [aws_security_group.instance_sg.id]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh-key.id
@@ -34,19 +34,10 @@ resource "aws_key_pair" "ssh-key" {
   public_key = file(var.public_key_location)
 }
 
-output "aws_ami_id" {
-  value = data.aws_ami.ubuntu.id
-}
-
-output "instance_id" {
-  description = "instance ID"
-  value       = aws_instance.web.id
-}
-
 resource "aws_security_group" "instance_sg" {
   name        = "instance_sg"
   description = "Allow ssh-http inbound traffic"
-  vpc_id      = data.aws_subnet.selected.vpc_id
+  vpc_id = data.terraform_remote_state.vpc_id.outputs.vpc_id
 
   ingress {
     description = "ssh"
@@ -82,8 +73,4 @@ resource "aws_security_group" "instance_sg" {
   tags = {
     Name = "instance_sg"
   }
-}
-
-data "aws_subnet" "selected" {
-  id = var.subnet_ids
 }
