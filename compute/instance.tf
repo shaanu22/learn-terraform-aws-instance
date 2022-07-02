@@ -14,10 +14,20 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+data "terraform_remote_state" "network-config" {
+  backend = "s3"
+
+  config = {
+    bucket = "samuel-s3-backend-bucket"
+    key    = "network-config.tfstate"
+    region = "us-east-1"
+  }
+}
+
 resource "aws_instance" "web" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance-type
-  subnet_id                   = data.terraform_remote_state.vpc_id.outputs.private_subnets[*]
+  subnet_id                   = data.terraform_remote_state.network-config.outputs.private_subnets[0]
   security_groups             = [aws_security_group.instance_sg.id]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh-key.id
@@ -37,7 +47,7 @@ resource "aws_key_pair" "ssh-key" {
 resource "aws_security_group" "instance_sg" {
   name        = "instance_sg"
   description = "Allow ssh-http inbound traffic"
-  vpc_id = data.terraform_remote_state.vpc_id.outputs.vpc_id
+  vpc_id = data.terraform_remote_state.network-config.outputs.vpc_id
 
   ingress {
     description = "ssh"
