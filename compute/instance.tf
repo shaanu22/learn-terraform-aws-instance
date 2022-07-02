@@ -30,18 +30,13 @@ resource "aws_instance" "web" {
   subnet_id                   = data.terraform_remote_state.network-config.outputs.private_subnets[0]
   security_groups             = [aws_security_group.instance_sg.id]
   associate_public_ip_address = true
-  key_name                    = aws_key_pair.ssh-key.id
+  key_name                    = "main"
 
   user_data = file("apache-script.sh")
 
   tags = {
     Name = "Hello-DevOps"
   }
-}
-
-resource "aws_key_pair" "ssh-key" {
-  key_name   = "server-key"
-  public_key = file(var.public_key_location)
 }
 
 resource "aws_security_group" "instance_sg" {
