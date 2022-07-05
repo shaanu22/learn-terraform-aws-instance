@@ -1,5 +1,13 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
 resource "aws_s3_bucket" "s3-backend-bucket" {
   bucket        = "s3-backend-bucket"
+}
+
+resource "aws_s3_bucket" "samuel-s3-backend-bucket" {
+  bucket        = "samuel-s3-backend-bucket"
   force_destroy = true
   versioning {
     enabled = true
