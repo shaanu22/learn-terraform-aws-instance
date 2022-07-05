@@ -7,5 +7,3 @@ variable "public_cidr" {
 variable "private_cidr" {
   description = "cidr for private subnet"
 }
-
-variable "subnet_id" {}
