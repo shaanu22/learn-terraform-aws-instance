@@ -4,10 +4,6 @@ provider "aws" {
 
 resource "aws_s3_bucket" "s3-backend-bucket" {
   bucket        = "s3-backend-bucket"
-}
-
-resource "aws_s3_bucket" "samuel-s3-backend-bucket" {
-  bucket        = "samuel-s3-backend-bucket"
   force_destroy = true
   versioning {
     enabled = true
@@ -47,4 +43,3 @@ resource "aws_dynamodb_table" "lock" {
     Name = "lock"
   }
 }
-

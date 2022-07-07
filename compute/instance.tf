@@ -18,7 +18,7 @@ data "terraform_remote_state" "network-config" {
   backend = "s3"
 
   config = {
-    bucket = "samuel-s3-backend-bucket"
+    bucket = "s3-backend-bucket"
     key    = "network-config.tfstate"
     region = "us-east-1"
   }
