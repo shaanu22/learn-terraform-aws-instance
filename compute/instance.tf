@@ -27,9 +27,9 @@ data "terraform_remote_state" "network-config" {
 resource "aws_instance" "web" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance-type
-  subnet_id                   = data.terraform_remote_state.network-config.outputs.public_subnets[0]
+  subnet_id                   = data.terraform_remote_state.network-config.outputs.private_subnets[0]
   security_groups             = [aws_security_group.instance_sg.id]
-  associate_public_ip_address = true
+  associate_public_ip_address = false
   key_name                    = "main"
 
   user_data = file("apache-script.sh")
@@ -42,14 +42,14 @@ resource "aws_instance" "web" {
 resource "aws_security_group" "instance_sg" {
   name        = "instance_sg"
   description = "Allow ssh-http inbound traffic"
-  vpc_id = data.terraform_remote_state.network-config.outputs.vpc_id
+  vpc_id      = data.terraform_remote_state.network-config.outputs.vpc_id
 
   ingress {
-    description = "ssh"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.my_ip_address]
+    description     = "ssh"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    cidr_blocks     = [var.my_ip_address]
   }
 
   ingress {
