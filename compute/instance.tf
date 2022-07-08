@@ -45,11 +45,11 @@ resource "aws_security_group" "instance_sg" {
   vpc_id      = data.terraform_remote_state.network-config.outputs.vpc_id
 
   ingress {
-    description     = "ssh"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    cidr_blocks     = [var.my_ip_address]
+    description = "ssh"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.my_ip_address]
   }
 
   ingress {
