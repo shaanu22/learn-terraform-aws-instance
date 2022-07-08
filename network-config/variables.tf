@@ -7,3 +7,8 @@ variable "public_cidr" {
 variable "private_cidr" {
   description = "cidr for private subnet"
 }
+
+variable "availability_zones" {
+  type        = list(any)
+  description = "AZ in which all the resources will be deployed"
+}
