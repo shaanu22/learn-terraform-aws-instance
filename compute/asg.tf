@@ -5,7 +5,7 @@ resource "aws_launch_configuration" "ec2-launch-config" {
   key_name                    = "main"
   instance_type               = var.instance-type
   security_groups             = [aws_security_group.instance_sg.id]
-  
+
   lifecycle {
     create_before_destroy = true
   }
@@ -15,22 +15,23 @@ resource "aws_autoscaling_group" "hello-devOps-asg" {
   name                      = "hello-devOps-asg"
   max_size                  = 3
   min_size                  = 1
-  health_check_grace_period = 100
-  desired_capacity          = 1
+  health_check_grace_period = 300
+  desired_capacity          = 2
   force_delete              = true
   launch_configuration      = aws_launch_configuration.ec2-launch-config.name
-  health_check_type = "ELB"
+  health_check_type         = "ELB"
+  target_group_arns         = [aws_lb_target_group.elb-tg.arn]
   vpc_zone_identifier = [data.terraform_remote_state.network-config.outputs.private_subnets[0]
   ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tag {
     key                 = "Name"
     value               = "hello-devOps-asg"
     propagate_at_launch = true
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 
   timeouts {
