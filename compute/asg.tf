@@ -5,6 +5,7 @@ resource "aws_launch_configuration" "ec2-launch-config" {
   key_name                    = "main"
   instance_type               = var.instance-type
   security_groups             = [aws_security_group.instance_sg.id]
+  user_data = file("apache-script.sh")
 
   lifecycle {
     create_before_destroy = true
@@ -16,7 +17,7 @@ resource "aws_autoscaling_group" "hello-devOps-asg" {
   max_size                  = 3
   min_size                  = 1
   health_check_grace_period = 300
-  desired_capacity          = 2
+  desired_capacity          = 1
   force_delete              = true
   launch_configuration      = aws_launch_configuration.ec2-launch-config.name
   health_check_type         = "ELB"
