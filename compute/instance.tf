@@ -32,8 +32,6 @@ resource "aws_instance" "web" {
   associate_public_ip_address = false
   key_name                    = "main"
 
-  user_data = file("apache-script.sh")
-
   tags = {
     Name = "Hello-DevOps"
   }
