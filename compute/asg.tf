@@ -5,7 +5,8 @@ resource "aws_launch_configuration" "ec2-launch-config" {
   key_name                    = "main"
   instance_type               = var.instance-type
   security_groups             = [aws_security_group.instance_sg.id]
-  user_data = file("apache-script.sh")
+  user_data                   = file("apache-script.sh")
+  iam_instance_profile        = aws_iam_instance_profile.s3fullaccess.name
 
   lifecycle {
     create_before_destroy = true
