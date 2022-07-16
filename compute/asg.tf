@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "ec2-launch-config" {
   name                        = "ec2-launch-config"
-  image_id                    = data.aws_ami.ubuntu.id
+  image_id                    = data.aws_ami.amazon_linux.id
   associate_public_ip_address = false
   key_name                    = "main"
   instance_type               = var.instance-type
