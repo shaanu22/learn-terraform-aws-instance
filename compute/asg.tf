@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "ec2-launch-config" {
   name                        = "ec2-launch-config"
-  image_id                    = data.aws_ami.ubuntu.id
+  image_id                    = data.aws_ami.amazon_linux.id
   associate_public_ip_address = false
   key_name                    = "main"
   instance_type               = var.instance-type
@@ -66,13 +66,6 @@ resource "aws_cloudwatch_metric_alarm" "hello-devops-alarm" {
 
   actions_enabled = true
   alarm_actions   = [aws_autoscaling_policy.hello-devops.arn]
-}
-
-data "aws_vpc" "main_vpc" {
-  filter {
-    name   = "tag:Name"
-    values = ["DevOps_VPC"]
-  }
 }
 
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
