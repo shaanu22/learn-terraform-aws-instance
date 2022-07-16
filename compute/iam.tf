@@ -8,7 +8,7 @@ resource "aws_iam_role" "asg-roles" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": ["ec2.amazonaws.com", "ssm.amazonaws.com"]
+        "Service": ["ec2.amazonaws.com"]
       },
       "Action": "sts:AssumeRole"
     }
@@ -47,4 +47,9 @@ resource "aws_iam_instance_profile" "asg-roles" {
 resource "aws_iam_role_policy_attachment" "s3fullaccess-policy" {
   role       = aws_iam_role.asg-roles.name
   policy_arn = aws_iam_policy.s3fullaccess.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.asg-roles.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
