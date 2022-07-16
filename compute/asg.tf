@@ -68,13 +68,6 @@ resource "aws_cloudwatch_metric_alarm" "hello-devops-alarm" {
   alarm_actions   = [aws_autoscaling_policy.hello-devops.arn]
 }
 
-data "aws_vpc" "main_vpc" {
-  filter {
-    name   = "tag:Name"
-    values = ["DevOps_VPC"]
-  }
-}
-
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
   autoscaling_group_name = aws_autoscaling_group.hello-devOps-asg.id
   alb_target_group_arn   = aws_lb_target_group.elb-tg.arn
