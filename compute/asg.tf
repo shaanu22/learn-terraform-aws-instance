@@ -1,8 +1,60 @@
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
+  }
+  owners = ["amazon"]
+}
+
+data "terraform_remote_state" "network-config" {
+  backend = "s3"
+
+  config = {
+    bucket = "s3-backend-bucket"
+    key    = "network-config.tfstate"
+    region = "us-east-1"
+  }
+}
+
+resource "aws_security_group" "instance_sg" {
+  name        = "instance_sg"
+  description = "Allow http inbound traffic"
+  vpc_id      = data.terraform_remote_state.network-config.outputs.vpc_id
+
+  ingress {
+    description = "http"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "instance_sg"
+  }
+}
+
 resource "aws_launch_configuration" "ec2-launch-config" {
   name                        = "ec2-launch-config"
   image_id                    = data.aws_ami.amazon_linux.id
   associate_public_ip_address = false
-  key_name                    = "main"
   instance_type               = var.instance-type
   security_groups             = [aws_security_group.instance_sg.id]
   user_data                   = file("apache-script.sh")
@@ -71,4 +123,8 @@ resource "aws_cloudwatch_metric_alarm" "hello-devops-alarm" {
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
   autoscaling_group_name = aws_autoscaling_group.hello-devOps-asg.id
   alb_target_group_arn   = aws_lb_target_group.elb-tg.arn
+}
+
+output "aws_ami_id" {
+  value = data.aws_ami.amazon_linux.id
 }
