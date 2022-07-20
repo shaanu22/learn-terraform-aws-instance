@@ -89,3 +89,24 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+
+  backend "s3" {
+    bucket         = "s3-backend-bucket"
+    key            = "network-config.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "lock"
+  }
+}
+
+/*provider "aws" {
+  region = "us-east-1"
+}*/
+

@@ -1,18 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-resource "aws_s3_bucket" "s3-backend-bucket" {
-  bucket        = "s3-backend-bucket"
-  force_destroy = true
-  versioning {
-    enabled = true
-  }
-  tags = {
-    Name = "s3-backend-bucket"
-  }
-}
-
 resource "aws_s3_bucket_acl" "remote-state" {
   bucket = aws_s3_bucket.s3-backend-bucket.id
   acl    = "private"
@@ -41,5 +26,20 @@ resource "aws_dynamodb_table" "lock" {
 
   tags = {
     Name = "lock"
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_s3_bucket" "s3-backend-bucket" {
+  bucket        = "s3-backend-bucket"
+  force_destroy = true
+  versioning {
+    enabled = true
+  }
+  tags = {
+    Name = "s3-backend-bucket"
   }
 }
