@@ -11,6 +11,6 @@ output "public_subnets" {
   value = aws_subnet.public[*].id
 }
 
-output "cidr_vpc" {
+/*output "cidr_vpc" {
   value = aws_vpc.main.my_vpc_cidr.id
-}
+}*/
