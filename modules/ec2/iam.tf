@@ -1,55 +1,24 @@
-resource "aws_iam_role" "asg-roles" {
-  name = "asg-roles"
+resource "aws_iam_role" "SSMRole" {
+  name = "SSMRole"
 
   assume_role_policy = <<EOF
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": ["ec2.amazonaws.com"]
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-
-  tags = {
-    Name = "asg-roles"
-  }
-}
-
-resource "aws_iam_policy" "s3fullaccess" {
-  name        = "s3fullaccess"
-  description = "Policy for s3 full access"
-
-  policy = <<EOF
-{
     "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": "*"
-        }
-    ]
-}
+    "Statement": {
+      "Effect": "Allow",
+      "Principal": {"Service": "ssm.amazonaws.com"},
+      "Action": "sts:AssumeRole"
+   }
+ }
 EOF
 }
 
-resource "aws_iam_instance_profile" "asg-roles" {
-  name = "asg-roles"
-  role = aws_iam_role.asg-roles.name
-}
-
-resource "aws_iam_role_policy_attachment" "s3fullaccess-policy" {
-  role       = aws_iam_role.asg-roles.name
-  policy_arn = aws_iam_policy.s3fullaccess.arn
-}
-
-resource "aws_iam_role_policy_attachment" "ssm" {
-  role       = aws_iam_role.asg-roles.name
+resource "aws_iam_role_policy_attachment" "SSMRole-Attach" {
+  role       = aws_iam_role.SSMRole.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "SSM-ASG" {
+  name = "SSM-ASG"
+  role = aws_iam_role.SSMRole.name
 }

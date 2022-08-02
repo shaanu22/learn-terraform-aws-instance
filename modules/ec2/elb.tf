@@ -80,9 +80,3 @@ resource "aws_lb_listener" "custom-elb" {
     target_group_arn = aws_lb_target_group.elb-tg.arn
   }
 }
-
-/*resource "aws_lb_target_group_attachment" "instance-tg" {
-  target_group_arn = aws_lb_target_group.elb-tg.arn
-  target_id        = aws_instance.web.id
-  port             = 80
-}*/
