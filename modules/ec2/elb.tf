@@ -57,7 +57,7 @@ resource "aws_lb_target_group" "elb-tg" {
 
   health_check {
     interval            = 15
-    path                = "/"
+    path                = "/index.html"
     protocol            = "HTTP"
     timeout             = 10
     healthy_threshold   = 5
