@@ -73,7 +73,6 @@ resource "aws_autoscaling_group" "hello-devOps-asg" {
   desired_capacity          = 1
   force_delete              = true
   launch_configuration      = aws_launch_configuration.ec2-launch-config.name
-  health_check_type         = "ELB"
   target_group_arns         = [aws_lb_target_group.elb-tg.arn]
   vpc_zone_identifier = [data.terraform_remote_state.network-config.outputs.private_subnets[0]
   ]
