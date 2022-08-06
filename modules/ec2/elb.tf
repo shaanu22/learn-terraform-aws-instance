@@ -57,7 +57,7 @@ resource "aws_lb_target_group" "elb-tg" {
 
   health_check {
     interval            = 15
-    path                = "/"
+    path                = "/index.html"
     protocol            = "HTTP"
     timeout             = 10
     healthy_threshold   = 5
@@ -74,15 +74,8 @@ resource "aws_lb_listener" "custom-elb" {
   load_balancer_arn = aws_lb.custom-elb.arn
   port              = "80"
   protocol          = "HTTP"
-
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.elb-tg.arn
   }
 }
-
-/*resource "aws_lb_target_group_attachment" "instance-tg" {
-  target_group_arn = aws_lb_target_group.elb-tg.arn
-  target_id        = aws_instance.web.id
-  port             = 80
-}*/

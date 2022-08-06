@@ -55,10 +55,10 @@ resource "aws_launch_configuration" "ec2-launch-config" {
   name                        = "ec2-launch-config"
   image_id                    = data.aws_ami.amazon_linux.id
   associate_public_ip_address = false
-  instance_type               = var.instance-type
+  instance_type               = var.instance_type
   security_groups             = [aws_security_group.instance_sg.id]
   user_data                   = file("apache-script.sh")
-  iam_instance_profile        = aws_iam_instance_profile.asg-roles.name
+  iam_instance_profile        = aws_iam_instance_profile.SSM-ASG.name
 
   lifecycle {
     create_before_destroy = true
@@ -73,7 +73,6 @@ resource "aws_autoscaling_group" "hello-devOps-asg" {
   desired_capacity          = 1
   force_delete              = true
   launch_configuration      = aws_launch_configuration.ec2-launch-config.name
-  health_check_type         = "ELB"
   target_group_arns         = [aws_lb_target_group.elb-tg.arn]
   vpc_zone_identifier = [data.terraform_remote_state.network-config.outputs.private_subnets[0]
   ]
@@ -123,8 +122,4 @@ resource "aws_cloudwatch_metric_alarm" "hello-devops-alarm" {
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
   autoscaling_group_name = aws_autoscaling_group.hello-devOps-asg.id
   alb_target_group_arn   = aws_lb_target_group.elb-tg.arn
-}
-
-output "aws_ami_id" {
-  value = data.aws_ami.amazon_linux.id
 }
