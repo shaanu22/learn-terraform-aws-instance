@@ -5,7 +5,3 @@ output "instance_id" {
 output "aws_ami_id" {
   value = data.aws_ami.amazon_linux.id
 }
-
-output "aws_acm" {
-    value = aws_acm_certificate.acm_certificate.arn
-}
