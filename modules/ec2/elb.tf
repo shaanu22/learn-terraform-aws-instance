@@ -70,10 +70,13 @@ resource "aws_lb_target_group" "elb-tg" {
   }
 }
 
-resource "aws_lb_listener" "custom-elb" {
+resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.custom-elb.arn
-  port              = "80"
-  protocol          = "HTTP"
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = aws_acm_certificate.acm_certificate.arn
+
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.elb-tg.arn
